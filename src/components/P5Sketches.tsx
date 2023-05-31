@@ -199,7 +199,7 @@ const AudioVis: Sketch = (p5) => {
   let prevButton: P5.Element;
   let nowPlaying: P5.SoundFile;
   let playbackContainer: P5.Element;
-  let stat = false;
+  //   let stat = false;
 
   const w = 10;
 
@@ -304,14 +304,10 @@ const AudioVis: Sketch = (p5) => {
   }
 
   function playsong() {
-    if (stat) {
-      nowPlaying.stop();
-      stat = false;
-      console.log(nowPlaying);
+    if (nowPlaying.isPlaying()) {
+      nowPlaying.pause();
     } else {
-      stat = true;
       nowPlaying.play();
-      console.log(nowPlaying);
     }
   }
 };
