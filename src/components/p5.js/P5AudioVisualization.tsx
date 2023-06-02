@@ -79,8 +79,9 @@ const AudioVis: Sketch = (p5) => {
 
     updateVisualization();
     updateVolume();
-    // updateTimeline();
-    updateAudioOnDrag();
+    updateTimeline();
+    autoPlayNextSongOnEnd();
+    // updateAudioOnDrag();
   };
 
   p5.keyPressed = () => {
@@ -281,6 +282,10 @@ const AudioVis: Sketch = (p5) => {
     const jumpVal = p5.map(timelineVal, 0, 100, 0, nowPlaying.duration());
     console.log(jumpVal, nowPlaying.duration());
     // nowPlaying.jump(jumpVal, nowPlaying.duration());
+  }
+
+  function autoPlayNextSongOnEnd() {
+    nowPlaying.onended(() => next());
   }
 };
 
