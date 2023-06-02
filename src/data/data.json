@@ -1,0 +1,40 @@
+{
+  "songs": [
+    {
+      "id": 0,
+      "audioUrl": "./assets/audio/SheepAndTides.mp3",
+      "albumCoverUrl": "../assets/covers/SheepAndTides.webp",
+      "title": "Sheeps and Tides",
+      "album": "Drowning by Numbers",
+      "artist": "Michael Nyman",
+      "year": 1998
+    },
+    {
+      "id": 1,
+      "audioUrl": "../assets/audio/Drugs.mp3",
+      "albumCoverUrl": "../assets/covers/Drugs.webp",
+      "title": "Drugs",
+      "album": "Drugs",
+      "artist": "Uffie",
+      "year": 2018
+    },
+    {
+      "id": 2,
+      "audioUrl": "../assets/audio/KickedOuyBySeven.mp3",
+      "albumCoverUrl": "../assets/covers/KickedOutBySeven.webp",
+      "title": "Kicked Out by Seven",
+      "album": "Eros In The Bunker",
+      "artist": "Double Virgo",
+      "year": 2022
+    },
+    {
+      "id": 3,
+      "audioUrl": "../assets/audio/TheCaptain.mp3",
+      "albumCoverUrl": "../assets/covers/TheCaptiain.webp",
+      "title": "The Captain",
+      "album": "Silent Shout",
+      "artist": "The Knife",
+      "year": 2006
+    }
+  ]
+}
