@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import P5 from 'p5';
 import { ReactP5Wrapper, Sketch } from 'react-p5-wrapper';
 import song0 from '../../assets/audio/SheepAndTides.mp3';
@@ -11,9 +12,6 @@ import cover3 from '../../assets/covers/TheCaptain.webp';
 import data from '../../data/data.json';
 
 const AudioVis: Sketch = (p5) => {
-  let fft: P5.FFT;
-  let h: number;
-
   interface Song {
     audioUrl: string;
     coverUrl: string;
@@ -27,21 +25,19 @@ const AudioVis: Sketch = (p5) => {
     duration?: number;
   }
 
-  const songs: Song[] = [
-    { audioUrl: song0, coverUrl: cover0 },
-    { audioUrl: song1, coverUrl: cover1 },
-    { audioUrl: song2, coverUrl: cover2 },
-    { audioUrl: song3, coverUrl: cover3 }
-  ];
-
   let play: P5.Element;
   let nextButton: P5.Element;
   let prevButton: P5.Element;
   let nowPlaying: P5.SoundFile;
+  let volumeButton: P5.Element;
   let songTitleAndArtist: P5.Element;
   let songAlbumAndYear: P5.Element;
+  let songCurrentTime: P5.Element;
+  let songTimeLeft: P5.Element;
   let volumeSlider: P5.Element;
   let audioTimelineSlider: P5.Element;
+  let volumSliderContainer: P5.Element;
+  let audioTimelineContainer: P5.Element;
   let audioControlsAndTimelineContainer: P5.Element;
   let playbackContainer: P5.Element;
   let audioControlsContainer: P5.Element;
@@ -49,10 +45,21 @@ const AudioVis: Sketch = (p5) => {
   let albumCoverContainer: P5.Element;
   let songMetadataContainer: P5.Element;
 
+  const songs: Song[] = [
+    { audioUrl: song0, coverUrl: cover0 },
+    { audioUrl: song1, coverUrl: cover1 },
+    { audioUrl: song2, coverUrl: cover2 },
+    { audioUrl: song3, coverUrl: cover3 }
+  ];
+
+  let spectrum: number[] = [];
+  let fft: P5.FFT;
   let currentSong = 0;
   const w = 10;
+  let h: number;
 
   p5.preload = () => {
+    p5.soundFormats('mp3');
     loadAndFormatAudioData();
   };
 
@@ -67,9 +74,6 @@ const AudioVis: Sketch = (p5) => {
 
     // Set button listeners
     keyboardControls();
-
-    // Set initial song
-    nowPlaying = songs[currentSong].audio!;
   };
 
   p5.draw = () => {
@@ -124,6 +128,10 @@ const AudioVis: Sketch = (p5) => {
     play.mousePressed(() => {
       playSong();
     });
+
+    volumeButton.mousePressed(() => {
+      toggleMute();
+    });
   }
 
   function loadAndFormatAudioData() {
@@ -144,6 +152,8 @@ const AudioVis: Sketch = (p5) => {
       song.year = data.songs[i].year;
       song.duration = songs[i].audio?.duration();
     });
+
+    nowPlaying = songs[0].audio!;
   }
 
   function next() {
@@ -199,6 +209,7 @@ const AudioVis: Sketch = (p5) => {
     play = p5.createButton('');
     nextButton = p5.createButton('');
     prevButton = p5.createButton('');
+    volumeButton = p5.createButton('');
     songTitleAndArtist = p5.createElement(
       'h2',
       `${songs[currentSong].title} by ${songs[currentSong].artist} `
@@ -209,7 +220,11 @@ const AudioVis: Sketch = (p5) => {
     );
     volumeSlider = p5.createSlider(0, 50, 25, 1);
     audioTimelineSlider = p5.createSlider(0, 100, 0, 1);
+    songCurrentTime = p5.createSpan();
+    songTimeLeft = p5.createSpan();
     audioControlsAndTimelineContainer = p5.createElement('div');
+    volumSliderContainer = p5.createElement('div');
+    audioTimelineContainer = p5.createElement('div');
     playbackContainer = p5.createElement('div');
     audioControlsContainer = p5.createElement('div');
     albumCoverAndMetaDataContainer = p5.createElement('div');
@@ -219,9 +234,12 @@ const AudioVis: Sketch = (p5) => {
     prevButton.addClass('prev-button');
     play.addClass('play-button');
     nextButton.addClass('next-button');
+    volumeButton.addClass('volume-button');
     songTitleAndArtist.addClass('song-title-and-artist');
     volumeSlider.addClass('volume-slider');
     audioTimelineSlider.addClass('audio-timeline-slider');
+    volumSliderContainer.addClass('volume-slider-container');
+    audioTimelineContainer.addClass('audio-timeline-container');
     playbackContainer.addClass('playback-container');
     audioControlsAndTimelineContainer.addClass(
       'audio-controls-timeline-container'
@@ -236,8 +254,12 @@ const AudioVis: Sketch = (p5) => {
     audioControlsContainer.child(play);
     audioControlsContainer.child(nextButton);
 
+    audioTimelineContainer.child(songCurrentTime);
+    audioTimelineContainer.child(audioTimelineSlider);
+    audioTimelineContainer.child(songTimeLeft);
+
     audioControlsAndTimelineContainer.child(audioControlsContainer);
-    audioControlsAndTimelineContainer.child(audioTimelineSlider);
+    audioControlsAndTimelineContainer.child(audioTimelineContainer);
 
     for (let i = songs.length - 1; i >= 0; i--) {
       albumCoverContainer.child(songs[i].cover);
@@ -249,13 +271,17 @@ const AudioVis: Sketch = (p5) => {
     albumCoverAndMetaDataContainer.child(albumCoverContainer);
     albumCoverAndMetaDataContainer.child(songMetadataContainer);
 
+    volumSliderContainer.child(volumeButton);
+    volumSliderContainer.child(volumeSlider);
+
     playbackContainer.child(albumCoverAndMetaDataContainer);
     playbackContainer.child(audioControlsAndTimelineContainer);
-    playbackContainer.child(volumeSlider);
+    playbackContainer.child(volumSliderContainer);
   }
 
   function updateVisualization() {
-    const spectrum = fft.analyze();
+    spectrum = fft.analyze();
+    // console.log('hello', spectrum);
     for (let x = -p5.width / 3; x < p5.width / 3; x += w) {
       const i = p5.floor(p5.map(x, -300, 200, 0, 256));
       const u = spectrum[i];
@@ -275,6 +301,10 @@ const AudioVis: Sketch = (p5) => {
     audioTimelineSlider.value(
       p5.map(audioPosition, 0, nowPlaying.duration(), 0, 100)
     );
+    songCurrentTime.html(`${(nowPlaying.currentTime() / 60).toFixed(2)}`);
+    songTimeLeft.html(
+      `${((nowPlaying.duration() - nowPlaying.currentTime()) / 60).toFixed(2)}`
+    );
   }
 
   function updateAudioOnDrag() {
@@ -288,6 +318,16 @@ const AudioVis: Sketch = (p5) => {
     const duration = Math.ceil(Number(nowPlaying.duration().toFixed(1)));
     const currentTime = Math.ceil(Number(nowPlaying.currentTime().toFixed(1)));
     if (duration === currentTime) next();
+  }
+
+  function toggleMute() {
+    if (Number(volumeSlider.value()) > 0) {
+      volumeSlider.value(0);
+      volumeButton.addClass('display-mute-icon');
+    } else {
+      volumeSlider.value(25);
+      volumeButton.removeClass('display-mute-icon');
+    }
   }
 };
 
