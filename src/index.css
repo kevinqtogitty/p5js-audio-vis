@@ -103,21 +103,110 @@ body {
   row-gap: 1rem;
 }
 
+.audio-timeline-slider,
+.volume-slider {
+  background-color: #f0f0f0;
+  /* -webkit-appearance: none; */
+  outline: none;
+}
+
 .audio-timeline-slider {
   width: 100%;
 }
 
-.volume-slider {
+.audio-timeline-slider::-moz-range-track {
+  width: 100%;
+  height: 5px;
+  background: grey;
+}
+.audio-timeline-slider::-moz-range-progress {
+  background-color: tomato;
+  height: 5px;
+}
+.audio-timeline-slider::-moz-focus-outer {
+  border: 0;
+}
+.audio-timeline-slider::-moz-range-thumb {
+  height: 20px;
+  width: 5px;
+  visibility: hidden;
+}
+
+.volume-slider-container {
   position: absolute;
-  right: 4rem;
+  right: 5rem;
+  /* border: 2px solid red; */
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  column-gap: 1rem;
+}
+
+.volume-button {
+  background-image: url('./assets/icons/volume-on.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 2rem;
+  width: 2rem;
+  border: none;
+  cursor: pointer;
+  background-color: #f0f0f0;
+}
+
+.display-mute-icon {
+  background: url('./assets/icons/volume-off.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.volume-slider {
   width: 15rem;
+  margin: 0;
+  padding: 0;
+  height: 19px;
+  /* margin: 30px 2.5% 20px 2.5%; */
+}
+
+.volume-slider::-moz-range-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: grey;
+}
+.volume-slider::-moz-range-progress {
+  background-color: #007db5;
+}
+.volume-slider::-moz-focus-outer {
+  border: 0;
+}
+.volume-slider::-moz-range-thumb {
+  height: 20px;
+  width: 5px;
+  background-color: #fff;
+  cursor: ew-resize;
+}
+
+.audio-timeline-container {
+  /* border: 2px solid green; */
+  width: 20rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 1rem;
+  font-size: 0.8rem;
+}
+
+.audio-timeline-container > span {
+  /* border: 2px solid green; */
+  width: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(3, 2, 1, 0.5);
 }
 
 .audio-controls-container {
-  /* display: flex; */
   column-gap: 1rem;
-  /* border: 2px solid green; */
-  /* justify-self: right; */
   padding: 0rem 1rem;
 }
 
