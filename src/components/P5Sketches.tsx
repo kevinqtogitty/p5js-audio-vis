@@ -2,10 +2,6 @@
 import P5 from 'p5';
 import { Vector } from 'p5';
 import { ReactP5Wrapper, Sketch } from 'react-p5-wrapper';
-import song0 from '../assets/audio/SheepAndTides.mp3';
-import song1 from '../assets/audio/Drugs.mp3';
-import song2 from '../assets/audio/KickedOutBySeven.mp3';
-import song3 from '../assets/audio/TheCaptain.mp3';
 
 const background: Sketch = (p5) => {
   let canvas;
@@ -186,132 +182,6 @@ const snowFall: Sketch = (p5) => {
   };
 };
 
-const AudioVis: Sketch = (p5) => {
-  let fft: P5.FFT;
-  let h: number;
-  let audio: string;
-
-  const songFiles = [song0, song1, song2, song3];
-  const musicList: P5.SoundFile[] = [];
-
-  let play: P5.Element;
-  let nextButton: P5.Element;
-  let prevButton: P5.Element;
-  let nowPlaying: P5.SoundFile;
-  let playbackContainer: P5.Element;
-  //   let stat = false;
-
-  const w = 10;
-
-  p5.preload = () => {
-    songFiles.forEach((song) => musicList.push(p5.loadSound(song)));
-  };
-
-  const toggleOrthoOn = () => {
-    p5.ortho();
-  };
-
-  const toggleOrthoOff = () => {
-    p5.perspective();
-  };
-
-  p5.keyPressed = () => {
-    p5.key == ' '
-      ? playsong()
-      : p5.key == 'o'
-      ? toggleOrthoOn()
-      : p5.key == 'p'
-      ? toggleOrthoOff()
-      : p5.key == 'ArrowRight'
-      ? next()
-      : p5.key == 'ArrowLeft'
-      ? prev()
-      : null;
-  };
-
-  p5.setup = () => {
-    p5.createCanvas(700, 500, p5.WEBGL);
-    p5.angleMode(p5.DEGREES);
-    fft = new P5.FFT(0.9, 512);
-
-    play = p5.createButton('Play');
-    nextButton = p5.createButton('Next');
-    prevButton = p5.createButton('Previous');
-    playbackContainer = p5.createElement('div');
-
-    prevButton.addClass('prev-button');
-    play.addClass('play-button');
-    nextButton.addClass('next-button');
-    playbackContainer.addClass('playback-container');
-
-    playbackContainer.child(prevButton);
-    playbackContainer.child(play);
-    playbackContainer.child(nextButton);
-
-    nowPlaying = musicList[0];
-
-    prevButton.mousePressed(() => {
-      prev();
-    });
-
-    nextButton.mousePressed(() => {
-      next();
-    });
-
-    play.mousePressed(() => {
-      playsong();
-    });
-  };
-
-  p5.draw = () => {
-    p5.background(0);
-    p5.translate(0, 0, -100);
-    p5.rotateX(60);
-
-    const spectrum = fft.analyze();
-    for (let x = -p5.width / 3; x < p5.width / 3; x += w) {
-      const i = p5.floor(p5.map(x, -300, 200, 0, 256));
-      const u = spectrum[i];
-      for (let y = 0; y <= 100; y += w) {
-        h = u;
-        p5.fill(100, h * 1.2, p5.map(y, 0, 100, 100, 255));
-        p5.push();
-        p5.translate(x, y, h);
-        p5.box(w);
-        p5.pop();
-      }
-    }
-  };
-
-  function next() {
-    nowPlaying.stop();
-    if (musicList.indexOf(nowPlaying) + 1 === 4) {
-      nowPlaying = musicList[0];
-    } else {
-      nowPlaying = musicList[musicList.indexOf(nowPlaying) + 1];
-    }
-    nowPlaying.play();
-  }
-
-  function prev() {
-    nowPlaying.stop();
-    if (musicList.indexOf(nowPlaying) - 1 === -1) {
-      nowPlaying = musicList[3];
-    } else {
-      nowPlaying = musicList[musicList.indexOf(nowPlaying) - 1];
-    }
-    nowPlaying.play();
-  }
-
-  function playsong() {
-    if (nowPlaying.isPlaying()) {
-      nowPlaying.pause();
-    } else {
-      nowPlaying.play();
-    }
-  }
-};
-
 export const P5Background = () => {
   return <ReactP5Wrapper sketch={background} />;
 };
@@ -326,11 +196,4 @@ export const P5StartBurst = () => {
 
 export const P5SnowFall = () => {
   return <ReactP5Wrapper sketch={snowFall} />;
-};
-
-interface Props {
-  url: string;
-}
-export const P5AudioVisualizer = () => {
-  return <ReactP5Wrapper sketch={AudioVis} />;
 };
