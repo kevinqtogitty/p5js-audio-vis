@@ -107,7 +107,7 @@ const AudioVis: Sketch = (p5) => {
   }
 
   function updateVolume() {
-    nowPlaying.setVolume(Number(volumeSlider.value()) * 0.1);
+    nowPlaying.setVolume(Number(volumeSlider.value()) * 0.01);
   }
 
   function keyboardControls() {
@@ -285,7 +285,9 @@ const AudioVis: Sketch = (p5) => {
   }
 
   function autoPlayNextSongOnEnd() {
-    nowPlaying.onended(() => next());
+    const duration = Math.ceil(Number(nowPlaying.duration().toFixed(1)));
+    const currentTime = Math.ceil(Number(nowPlaying.currentTime().toFixed(1)));
+    if (duration === currentTime) next();
   }
 };
 
