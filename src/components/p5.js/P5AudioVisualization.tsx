@@ -85,7 +85,6 @@ const AudioVis: Sketch = (p5) => {
     updateVolume();
     updateTimeline();
     autoPlayNextSongOnEnd();
-    // updateAudioOnDrag();
   };
 
   p5.keyPressed = () => {
@@ -298,20 +297,24 @@ const AudioVis: Sketch = (p5) => {
 
   function updateTimeline() {
     const audioPosition = nowPlaying.currentTime();
+    const totalSecondsLeft = nowPlaying.duration() - nowPlaying.currentTime();
+    const currentMinute = (audioPosition / 60).toFixed(0);
+    const currentSeconds = (audioPosition % 60).toFixed(0);
+    const remainingMinutes = (totalSecondsLeft / 60).toFixed(0);
+    const remainingSeconds = (totalSecondsLeft % 60).toFixed(0);
+
     audioTimelineSlider.value(
       p5.map(audioPosition, 0, nowPlaying.duration(), 0, 100)
     );
-    songCurrentTime.html(`${(nowPlaying.currentTime() / 60).toFixed(2)}`);
-    songTimeLeft.html(
-      `${((nowPlaying.duration() - nowPlaying.currentTime()) / 60).toFixed(2)}`
-    );
-  }
 
-  function updateAudioOnDrag() {
-    const timelineVal = Number(audioTimelineSlider.value());
-    const jumpVal = p5.map(timelineVal, 0, 100, 0, nowPlaying.duration());
-    console.log(jumpVal, nowPlaying.duration());
-    // nowPlaying.jump(jumpVal, nowPlaying.duration());
+    // Formatting time, if the seconds is less than 10 add a zero
+    Number(currentSeconds) < 10
+      ? songCurrentTime.html(`${currentMinute}:0${currentSeconds}`)
+      : songCurrentTime.html(`${currentMinute}:${currentSeconds}`);
+
+    Number(remainingSeconds) < 10
+      ? songTimeLeft.html(`${remainingMinutes}:0${remainingSeconds}`)
+      : songTimeLeft.html(`${remainingMinutes}:${remainingSeconds}`);
   }
 
   function autoPlayNextSongOnEnd() {
