@@ -4,7 +4,7 @@ import { ReactP5Wrapper, Sketch } from 'react-p5-wrapper';
 import song0 from '../../assets/audio/SheepAndTides.mp3';
 import song1 from '../../assets/audio/Drugs.mp3';
 import song3 from '../../assets/audio/TheCaptain.mp3';
-import song2 from '../../assets/audio/KickedOutBySeven.mp3';
+// import song2 from '../../assets/audio/KickedOutBySeven.mp3';
 import cover0 from '../../assets/covers/SheepsAndTides.webp';
 import cover1 from '../../assets/covers/Drugs.webp';
 import cover2 from '../../assets/covers/KickedOutBySeven.webp';
@@ -52,7 +52,7 @@ const AudioVis: Sketch = (p5) => {
   const songs: Song[] = [
     { audioUrl: song0, coverUrl: cover0 },
     { audioUrl: song1, coverUrl: cover1 },
-    { audioUrl: song2, coverUrl: cover2 },
+    // { audioUrl: song2, coverUrl: cover2 },
     { audioUrl: song3, coverUrl: cover3 }
   ];
 
