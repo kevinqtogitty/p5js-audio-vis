@@ -7,7 +7,7 @@ import song3 from '../../assets/audio/TheCaptain.mp3';
 // import song2 from '../../assets/audio/KickedOutBySeven.mp3';
 import cover0 from '../../assets/covers/SheepsAndTides.webp';
 import cover1 from '../../assets/covers/Drugs.webp';
-import cover2 from '../../assets/covers/KickedOutBySeven.webp';
+// import cover2 from '../../assets/covers/KickedOutBySeven.webp';
 import cover3 from '../../assets/covers/TheCaptain.webp';
 import data from '../../data/data.json';
 
