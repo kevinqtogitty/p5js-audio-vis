@@ -1,10 +1,8 @@
-<div style="display: flex; flex-direction: column; row-gap: 1rem; align-items: center; justify-content: space-evenly">
 # React-P5.js Audio Visualization
 
 Audio visualization made with P5.js, webGL, webAudio API, P5.js sound, and React
 
 <img src="./src/assets/gifs/preview.gif"  width="600" height="300">
-</div>
 
 ## To install and run
 
