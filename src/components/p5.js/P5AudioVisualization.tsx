@@ -62,7 +62,6 @@ const AudioVis: Sketch = (p5) => {
   p5.preload = () => {
     p5.soundFormats('mp3');
     loadAndFormatAudioData();
-    initializeHtml();
   };
 
   p5.setup = () => {
@@ -70,6 +69,8 @@ const AudioVis: Sketch = (p5) => {
     p5.angleMode(p5.DEGREES);
 
     fft = new P5.FFT(0.9, 512);
+
+    initializeHtml();
   };
 
   p5.draw = () => {
