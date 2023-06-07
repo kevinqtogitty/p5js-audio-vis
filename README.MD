@@ -2,7 +2,7 @@
 
 Audio visualization made with P5.js, webGL, webAudio API, P5.js sound, and React
 
-![til](./src/assets/gifs/preview.gif)
+<img src="./src/assets/gifs/preview.gif)"  width="600" height="300">
 
 ## To install and run
 
