@@ -76,7 +76,7 @@ const AudioVis: Sketch = (p5) => {
   };
 
   p5.draw = () => {
-    p5.background(3, 2, 1, 0.8);
+    p5.background(3, 2, 1, 0.0);
     p5.translate(0, 0, -100);
     p5.rotateX(60);
 
@@ -92,6 +92,8 @@ const AudioVis: Sketch = (p5) => {
       ? toggleOrthoOn()
       : p5.key == 'p'
       ? toggleOrthoOff()
+      : p5.key == 'm'
+      ? toggleMute()
       : p5.key == 'ArrowRight'
       ? next()
       : p5.key == 'ArrowLeft'
@@ -240,7 +242,8 @@ const AudioVis: Sketch = (p5) => {
     }
   }
 
-  function toggleColorGradient() {
+  function toggleColor() {
+    console.log('here');
     currentFillGradientScheme === 2
       ? (currentFillGradientScheme = 0)
       : currentFillGradientScheme++;
@@ -335,7 +338,7 @@ const AudioVis: Sketch = (p5) => {
     playbackContainer.child(audioControlsAndTimelineContainer);
     playbackContainer.child(volumSliderContainer);
 
-    toggleColorVisOverlay.mousePressed(toggleColorGradient);
+    toggleColorVisOverlay.mousePressed(toggleColor);
     prevButton.mousePressed(() => {
       prev();
       albumCoverContainer.child(songs[currentSong].cover);
